@@ -4,6 +4,7 @@
  * @n: the integer to be added to the stack element (node)
  * Return: void
  */
+stack_t *temp;
 void push(int n)
 {
 	stack_t *node = malloc(sizeof(stack_t));

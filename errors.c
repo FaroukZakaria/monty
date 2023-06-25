@@ -1,19 +1,19 @@
-#include "main.h"
+#include "monty.h"
 /**
  * invalid - checks for invalid opcodes
  * @file: the file to be checked
- * Return: "value" if not failure
+ * Return: 0 if not failure and "-1" if invalid opcode
  */
 int check(char *file)
 {
-	int nline, i, value, j = 0;
+	int nline, i, j = 0, neg = -1;
 	char line[256];
-	char *opc, *arg, *result;
-	char **opcs == {"push", NULL};
+	char *opc, *arg;
+	char *opcs[] = {"push", NULL};
 	FILE *fp;
 
 	fp = fopen(file, "r");
-	for (nline = 1; fgets(line, sizeof(line), file) != NULL; nline++)
+	for (nline = 1; fgets(line, sizeof(line), fp) != NULL; nline++)
 	{
 		for (i = 0; line[i] == ' ';)
 			i++;
@@ -32,7 +32,12 @@ int check(char *file)
 				else if (*arg == ' ' && *(arg + 1) != '\0' && *(arg + 1) != ' ')
 				{
 					arg++;
-					value = atoi(arg);
+					if ((atoi(arg) == 0) && (*arg != '0'))
+					{
+						printf("L%d: usage: %s integer\n", nline, opcs[j]);
+						fclose(fp);
+						exit(EXIT_FAILURE);
+					}
 					continue;
 				}
 				else if (*arg == ' ' && *(arg + 1) == ' ')
@@ -46,14 +51,25 @@ int check(char *file)
 							fclose(fp);
 							exit(EXIT_FAILURE);
 						}
-					value = atoi(arg);
-					continue;
+					}
+					if ((atoi(arg) == 0) && (*arg != '0'))
+					{
+						printf("L%d: usage: %s integer\n", nline, opcs[j]);
+						fclose(fp);
+						exit(EXIT_FAILURE);
 					}
 				}
+				neg = 0;
+			}
+			if ((neg != 0) && (opcs[j + 1] == NULL))
+			{
+				printf("L%d: unknown instruction %s\n", nline, opcs[j]);
+				fclose(fp);
+				exit(EXIT_FAILURE);
 			}
 			j++;
 		}
 	}
 	fclose(fp);
-	return (value);
+	return (0);
 }

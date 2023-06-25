@@ -20,8 +20,6 @@ int main(int argc, char **argv)
 		printf("Error: Can't open file <file>\n");
 		exit(EXIT_FAILURE);
 	}
-	if (invalid == 0)
-	{
-		printf("L%d: unknown instruction %s\n", line, opc);
-		exit(EXIT_FAILURE);
-	}
+	check(argv[1]);
+	return (0);
+}
